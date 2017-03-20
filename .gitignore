@@ -4,3 +4,4 @@ node_modules
 deadpool_app.iml
 /coverage
 npm-debug.log
+test-results.xml
