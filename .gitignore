@@ -2,3 +2,5 @@
 .idea
 node_modules
 deadpool_app.iml
+/coverage
+npm-debug.log

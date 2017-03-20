@@ -9,6 +9,9 @@ const modelsUser = require('../models/users');
 module.exports = {
     initDb : function(req,res) {
         let usersCollection = mongo.db.collection('users');
+        if(req.query.clean) {
+            usersCollection.removeMany({});
+        }
         usersCollection.find({}).toArray()
             .then(users => {
                 if(users.length < 1) return usersCollection.insertMany(initData);
@@ -36,7 +39,7 @@ module.exports = {
             });
     },
     addUsers : function(req,res){
-            let err = modelsUser.validateUsers(req.body);
+            let err = modelsUser.validateUser(req.body);
 
             if(err.length > 0) {
                 res.status(400).send(err);
@@ -62,7 +65,7 @@ module.exports = {
                 });
     },
     editUsers : function(req,res){
-        let err = modelsUser.validateUsers(req.body);
+        let err = modelsUser.validateUser(req.body);
         let usersCollection = mongo.db.collection('users');
 
         if(err.length > 0) {
@@ -79,6 +82,8 @@ module.exports = {
 
     },
     debit : function(req,res){
+
+
         if(!Number.isInteger(req.body.debitAmount)){
             res.status(400).send({code: 400, message : "Bad format for amount", id : 301});
             return;
@@ -99,6 +104,12 @@ module.exports = {
         usersCollection.findOne({_id:new ObjectId(req.params.id)})
             .then(doc => {
                 user = doc;
+                let err = modelsUser.validateUser(user);
+
+                if(err.length > 0) {
+                    res.status(400).send(err);
+                    return;
+                }
                 if(user.amount < (debitAmount*5)) {
                     res.status(400).send({code : 400, message : "amount on the account insufficient", id : 302});
                     return;

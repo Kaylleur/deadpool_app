@@ -88,3 +88,5 @@ function onListening() {
     : 'port ' + addr.port;
   console.info('Listening on ' + bind);
 }
+
+module.exports = server;
