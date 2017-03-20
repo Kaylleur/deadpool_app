@@ -1,4 +1,6 @@
-image: mongo:latest
+
+mongodb:
+    image: mongo:latest
     restart: always
     volumes:
         - /opt/mongodb
