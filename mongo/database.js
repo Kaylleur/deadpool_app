@@ -1,17 +1,17 @@
 /**
  * Created by thomas on 10/03/17.
  */
-const mongoose = require('mongoose');
-mongoose.Promise = Promise;
+const MongoClient = require('mongodb').MongoClient;
 
 let mongo = {
     connect: function() {
-        let url = 'mongodb://localhost:27017/stadeeztics';
-        mongoose.connect(url);
-        let mongooseDb = mongoose.connection;
-        mongooseDb.on('error', console.error.bind(console, 'connection error:'));
-        mongooseDb.once('open', function() {
-            console.info('Connected successfully with Mongoose.');
+        let url = 'mongodb://localhost:27017/devops';
+
+        MongoClient.connect(url, function(err, db) {
+            if (err) console.error('connection error: ' + err);
+            else console.log('Connected successfully with Mongo ');
+
+            mongo.db = db;
         });
     }
 };
